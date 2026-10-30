@@ -1,25 +1,27 @@
 # Caddy-Cloudflare
 
-[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-yqs112358%2Fcaddy--cloudflare-blue?style=flat)](https://hub.docker.com/r/yqs112358/caddy-cloudflare)
-[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/yqs112358/docker-caddy-cloudflare?label=version)](https://github.com/yqs112358/docker-caddy-cloudflare/tags)
-[![GitHub build status](https://img.shields.io/github/actions/workflow/status/yqs112358/docker-caddy-cloudflare/docker.yml?style=flat)](https://github.com/yqs112358/docker-caddy-cloudflare/actions/workflows/docker.yml)
-[![License](https://img.shields.io/github/license/yqs112358/docker-caddy-cloudflare)](https://github.com/yqs112358/docker-caddy-cloudflare/blob/main/LICENSE)
+[English](README.md) | [简体中文](README.zh-CN.md)
+
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-suichyan%2Fcaddy--cloudflare--layer4-blue?style=flat)](https://hub.docker.com/r/suichyan/caddy-cloudflare-layer4)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/suichyan/docker-caddy-cloudflare-layer4?label=version)](https://github.com/suichyan/docker-caddy-cloudflare-layer4/tags)
+[![GitHub build status](https://img.shields.io/github/actions/workflow/status/suichyan/docker-caddy-cloudflare-layer4/docker.yml?style=flat)](https://github.com/suichyan/docker-caddy-cloudflare-layer4/actions/workflows/docker.yml)
+[![License](https://img.shields.io/github/license/suichyan/docker-caddy-cloudflare-layer4)](https://github.com/suichyan/docker-caddy-cloudflare-layer4/blob/main/LICENSE)
 
 > Project forked and simplified from https://github.com/IAreKyleW00t/docker-caddy-cloudflare
 
-The official [Caddy](https://hub.docker.com/_/caddy) Docker image with the added [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare) module for DNS-01 ACME validation support. This image does not change anything with Caddy except replacing the `caddy` binary. Built for all supported platforms!
+The official [Caddy](https://hub.docker.com/_/caddy) Docker image with two added modules: [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare) for DNS-01 ACME validation and [mholt/caddy-l4](https://github.com/mholt/caddy-l4) for Layer 4 (TCP/UDP) proxying. This image does not change anything with Caddy except replacing the `caddy` binary. Built for `linux/amd64` only.
 
 ```sh
 # Docker Hub
-docker pull yqs112358/caddy-cloudflare:latest
+docker pull suichyan/caddy-cloudflare-layer4:latest
 
 # GHCR
-docker pull ghcr.io/yqs112358/caddy-cloudflare:latest
+docker pull ghcr.io/suichyan/caddy-cloudflare-layer4:latest
 ```
 
 ## Tags
 
-The following tags are available for the `yqs112358/caddy-cloudflare` image.
+The following tags are available for the `suichyan/caddy-cloudflare-layer4` image.
 
 - `latest`
 
@@ -38,7 +40,7 @@ docker run --rm -it \
   -v caddy_config:/config \
   -v $PWD/Caddyfile:/etc/caddy/Caddyfile \
   -e CF_API_TOKEN=UhKLc...JD9jk \
-  yqs112358/caddy-cloudflare:latest
+  suichyan/caddy-cloudflare-layer4:latest
 ```
 
 Then set the global [acme_dns](https://caddyserver.com/docs/caddyfile/options#acme-dns) directive in your `Caddyfile`
@@ -78,12 +80,37 @@ You can generate a Cloudflare API token via the Cloudflare web console using the
    - `Zone > Zone > Read`
    - `Zone > DNS > Edit`
 
+## Layer 4
+
+The [mholt/caddy-l4](https://github.com/mholt/caddy-l4) module ships a `layer4` app that proxies raw TCP and UDP — SSH, MQTT, game servers, or TLS traffic routed by SNI without terminating it at an HTTP server.
+
+`layer4` is a top-level app, so it goes in the global options block instead of a site block:
+
+```Caddyfile
+{
+	layer4 {
+		:8443 {
+			route {
+				proxy tcp/localhost:9443
+			}
+		}
+	}
+}
+```
+
+Use a bare `:8443` for TCP and `udp/:8443` for UDP. Validate before deploying, since the Caddyfile syntax changed between caddy-l4 v0.2 and v0.3:
+
+```sh
+docker run --rm -v $PWD/Caddyfile:/etc/caddy/Caddyfile \
+  suichyan/caddy-cloudflare-layer4:latest caddy validate --config /etc/caddy/Caddyfile
+```
+
 ## Building
 
 You can easily build the Docker image locally by doing
 
 ```sh
-docker build -t caddy-cloudflare .
+docker build -t caddy-cloudflare-layer4 .
 ```
 
 ## Contributing
@@ -92,4 +119,4 @@ Feel free to contribute and make things better by opening an [Issue](https://git
 
 ## License
 
-See [LICENSE](https://github.com/yqs112358/docker-caddy-cloudflare/blob/main/LICENSE).
+See [LICENSE](https://github.com/suichyan/docker-caddy-cloudflare-layer4/blob/main/LICENSE).
