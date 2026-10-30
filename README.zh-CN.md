@@ -3,7 +3,7 @@
 [English](README.md) | [简体中文](README.zh-CN.md)
 
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-suichyan%2Fcaddy--cloudflare--layer4-blue?style=flat)](https://hub.docker.com/r/suichyan/caddy-cloudflare-layer4)
-[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/suichyan/docker-caddy-cloudflare-layer4?label=version)](https://github.com/suichyan/docker-caddy-cloudflare-layer4/tags)
+[![version](https://img.shields.io/docker/v/suichyan/caddy-cloudflare-layer4?label=version)](https://hub.docker.com/r/suichyan/caddy-cloudflare-layer4/tags)
 [![GitHub build status](https://img.shields.io/github/actions/workflow/status/suichyan/docker-caddy-cloudflare-layer4/docker.yml?style=flat)](https://github.com/suichyan/docker-caddy-cloudflare-layer4/actions/workflows/docker.yml)
 [![License](https://img.shields.io/github/license/suichyan/docker-caddy-cloudflare-layer4)](https://github.com/suichyan/docker-caddy-cloudflare-layer4/blob/main/LICENSE)
 
